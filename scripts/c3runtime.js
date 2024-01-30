@@ -4174,9 +4174,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Behaviors.Bullet.Exps.AngleOfMotion,
 		C3.Plugins.System.Acts.SetPixelRounding,
+		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Behaviors.Bullet.Acts.SetGravity,
 		C3.Plugins.Sprite.Acts.SetSize,
-		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Sprite.Acts.SetWidth,
 		C3.Behaviors.Bullet.Acts.SetSpeed,
@@ -4187,7 +4188,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.PickRandom,
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.System.Cnds.CompareBoolVar,
-		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.Button.Cnds.OnClicked,
 		C3.Plugins.Text.Acts.AddInstanceVar,
@@ -4488,15 +4488,32 @@ self.C3_ExpressionFuncs = [
 		() => "moon",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => ((-25) * v0.GetValue());
+			return () => ((-20) * v0.GetValue());
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (25 * Math.pow(1.1, v0.GetValue()));
+			return () => (25 * Math.pow(1.06, v0.GetValue()));
 		},
+		() => 10,
+		() => -400,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (25 * Math.pow(1.02, v0.GetValue()));
+		},
+		() => "",
+		() => -600,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (25 * Math.pow(1.08, v0.GetValue()));
+		},
+		() => -1000,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (25 * Math.pow(1.14, v0.GetValue()));
+		},
+		() => -2,
 		() => "bonus",
 		() => "bonus_off",
-		() => "",
 		() => "pierce",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4536,7 +4553,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (and("You've suffered from a skill issue ", n0.ExpInstVar()) + " times. That's sad.");
 		},
-		() => 10,
 		() => "alr",
 		() => "broke",
 		p => {
