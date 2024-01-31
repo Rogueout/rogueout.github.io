@@ -4143,28 +4143,29 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Persist,
 		C3.Plugins.Sprite.Cnds.OnCreated,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
+		C3.Plugins.System.Cnds.While,
+		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Cnds.Compare,
+		C3.Plugins.Sprite.Exps.AnimationFrame,
+		C3.Plugins.Sprite.Exps.AnimationFrameCount,
+		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.System.Exps.random,
 		C3.Plugins.Sprite.Cnds.OnCollision,
-		C3.Plugins.System.Cnds.CompareVar,
-		C3.Plugins.System.Cnds.For,
-		C3.Plugins.System.Acts.Signal,
+		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.Sprite.Acts.Spawn,
-		C3.Plugins.System.Acts.AddVar,
-		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Sprite.Acts.AddInstanceVar,
-		C3.Plugins.Sprite.Exps.AnimationFrame,
-		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.System.Acts.SetVar,
+		C3.Plugins.System.Cnds.CompareVar,
 		C3.Behaviors.Bullet.Acts.Bounce,
+		C3.Plugins.System.Cnds.For,
+		C3.Plugins.System.Acts.Signal,
 		C3.Behaviors.Bullet.Acts.SetAngleOfMotion,
 		C3.Plugins.Sprite.Acts.SetAngle,
 		C3.Plugins.Sprite.Acts.SetPos,
-		C3.Plugins.Keyboard.Cnds.OnKey,
-		C3.Plugins.System.Acts.GoToLayoutByName,
 		C3.Plugins.Sprite.Cnds.OnDestroyed,
+		C3.Plugins.System.Acts.GoToLayoutByName,
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.Sprite.Cnds.CompareY,
 		C3.Behaviors.solid.Acts.SetEnabled,
@@ -4189,13 +4190,14 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.System.Cnds.Every,
-		C3.Plugins.Button.Cnds.OnClicked,
-		C3.Plugins.Text.Acts.AddInstanceVar,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
-		C3.Plugins.System.Acts.GoToLayout,
-		C3.Plugins.Text.Acts.SetVisible,
-		C3.Plugins.Sprite.Acts.SetVisible,
+		C3.Plugins.Sprite.Acts.SetAnim,
 		C3.Plugins.System.Acts.Wait,
+		C3.Plugins.Button.Cnds.OnClicked,
+		C3.Plugins.Text.Acts.SetVisible,
+		C3.Plugins.Text.Acts.AddInstanceVar,
+		C3.Plugins.System.Acts.GoToLayout,
+		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.Button.Acts.SetVisible
 	];
 };
@@ -4203,6 +4205,8 @@ self.C3_JsPropNameTable = [
 	{Pierce: 0},
 	{Bullet: 0},
 	{Ball: 0},
+	{Finished: 0},
+	{RNG: 0},
 	{Fade: 0},
 	{Solid: 0},
 	{Brick: 0},
@@ -4239,6 +4243,7 @@ self.C3_JsPropNameTable = [
 	{Keyboard: 0},
 	{Wall: 0},
 	{deaths: 0},
+	{mrFresh: 0},
 	{Persist: 0},
 	{lose_text: 0},
 	{die: 0},
@@ -4246,11 +4251,13 @@ self.C3_JsPropNameTable = [
 	{unstuck: 0},
 	{max_pierce: 0},
 	{ball_upgrade: 0},
+	{freshness: 0},
 	{Coins: 0},
 	{temp_pierce: 0},
 	{Difficulty: 0},
 	{dont: 0},
 	{poodont: 0},
+	{freshBonus: 0},
 	{Chance_level: 0},
 	{Pierce_level: 0},
 	{Bonus_level: 0},
@@ -4398,51 +4405,21 @@ function or(l, r)
 self.C3_ExpressionFuncs = [
 		() => 0,
 		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => v0.GetValue();
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject();
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 1);
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(1, 10);
 		},
-		() => 1,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() - 6);
-		},
-		() => 2,
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() - 12);
-		},
-		() => 3,
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() - 18);
-		},
-		() => 4,
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() - 24);
-		},
-		() => 5,
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() - 30);
-		},
-		() => 6,
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() - 36);
-		},
-		() => 7,
-		() => "chance",
-		() => "Chance Level",
-		() => "poo",
-		() => -1,
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject();
+			const n1 = p._GetNode(1);
+			return () => (v0.GetValue() - (6 * n1.ExpObject()));
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -4452,6 +4429,8 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 1);
 		},
+		() => 1,
+		() => -1,
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -4466,26 +4445,30 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => (n0.ExpObject() - (n1.ExpInstVar() + 1));
 		},
+		() => "chance",
+		() => "Chance Level",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
+		() => "poo",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(80, 100);
 		},
 		() => 352,
 		() => 240,
-		() => "upgraed",
 		() => "you lost smh",
 		() => 480,
+		() => "upgraed",
 		() => 470,
 		() => 465,
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() - 1);
-		},
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpBehavior() + 90);
 		},
 		() => "moon",
+		() => 5,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => ((-20) * v0.GetValue());
@@ -4494,6 +4477,7 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => (25 * Math.pow(1.06, v0.GetValue()));
 		},
+		() => 3,
 		() => 10,
 		() => -400,
 		p => {
@@ -4501,6 +4485,7 @@ self.C3_ExpressionFuncs = [
 			return () => (25 * Math.pow(1.02, v0.GetValue()));
 		},
 		() => "",
+		() => 4,
 		() => -600,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4515,6 +4500,7 @@ self.C3_ExpressionFuncs = [
 		() => "bonus",
 		() => "bonus_off",
 		() => "pierce",
+		() => 2,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("Coins:", v0.GetValue());
@@ -4543,7 +4529,17 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => (1 - (0.17 * v0.GetValue()));
 		},
+		() => "mrFresh",
+		() => 500,
+		() => 0.1,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			return () => f0((n1.ExpBehavior() + 1), (n2.ExpBehavior() - 1));
+		},
 		() => "GMAMAMGEMAGME",
+		() => -9999,
 		() => "Dang bro I think you died. If you want to play again, you can but you gotta start over. Not my rules :/",
 		() => "Dang, you died again. Maybe try some new upgrades, or focus on keeping the paddle underneath the ball.",
 		() => "Two deaths already? Are you speedrunning losing?",
@@ -4553,6 +4549,7 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (and("You've suffered from a skill issue ", n0.ExpInstVar()) + " times. That's sad.");
 		},
+		() => 20,
 		() => "alr",
 		() => "broke",
 		p => {
@@ -4575,15 +4572,16 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("Cost: ", v0.GetValue());
 		},
+		() => "Sold Out!",
 		() => 120,
 		() => -120,
 		() => 50,
+		() => 177,
 		() => -50,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (60 + (100 * v0.GetValue()));
-		},
-		() => "Sold Out!"
+		}
 ];
 
 
